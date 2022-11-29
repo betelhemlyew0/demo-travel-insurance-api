@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="globalError_Handler" doc:id="68e1edb7-63ed-4482-833a-43fe1724ec4a" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="b457c448-846d-452f-8a58-ff981f1590f2" >
+			<logger level="INFO" doc:name="Logger" doc:id="e5c4c2f8-2dec-4bac-9704-714570d0f6a1" message="error occured"/>
+		</on-error-propagate>
+	</error-handler>
+	<sub-flow name="set-error-response-Sub_Flow" doc:id="1e302c1d-4353-42ca-93ae-59f0a95d256f" >
+		<ee:transform doc:name="Transform Message" doc:id="4cf3f1c4-1124-4e1d-a52b-8b5dececa851" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"error":
+	{
+		"message" : error.description,
+		"type" : error.errorType.identifier
+	}
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</sub-flow>
+</mule>
