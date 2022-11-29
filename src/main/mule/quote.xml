@@ -17,5 +17,24 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</ee:variables>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="c6be3e6c-ab5f-4008-9494-ed28cba297c7" message="request completed successfully to get quotes"/>
+		<ee:transform doc:name="Transform Message" doc:id="9a4b2808-906e-41ef-984c-2b5b12c8254c" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+[
+  {
+    plan: "gold",
+    coverage: 25000,
+    premium: 300
+  }, 
+  {
+    plan: "platinum",
+    coverage: 50000,
+    premium: 500
+  }
+]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 	</sub-flow>
 </mule>
