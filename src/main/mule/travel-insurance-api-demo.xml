@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
+<mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
     <http:listener-config name="travel-insurance-api-demo-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
     <apikit:config name="travel-insurance-api-demo-config" api="resource::ccab5823-d90e-4e42-89c2-5312f9255e95:travel-insurance-api-demo:1.0.0:raml:zip:travel-insurance-api-demo.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <flow name="travel-insurance-api-demo-main">
+    <configuration-properties doc:name="Configuration properties" doc:id="98ce192a-0335-4c25-ab57-e6a2d9988873" file="config/${env}.properties" />
+	<configuration doc:name="Configuration" doc:id="c675bc67-28d5-4c54-b4a0-ffae7c3077b0" defaultErrorHandler-ref="globalError_Handler" />
+	<flow name="travel-insurance-api-demo-main">
         <http:listener config-ref="travel-insurance-api-demo-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -123,25 +125,7 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="get:\quote:travel-insurance-api-demo-config">
-        <ee:transform>
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-[
-  {
-    plan: "gold",
-    coverage: 25000,
-    premium: 300
-  }, 
-  {
-    plan: "platinum",
-    coverage: 50000,
-    premium: 500
-  }
-]]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    <flow name="get:\quote:travel-insurance-api-demo-config" doc:id="5f37acb1-3e6e-4c51-8f9e-582f698049b7">
+        <flow-ref doc:name="get-quote-Sub_Flow" doc:id="c0fdf4b6-f3b0-4569-87d4-f6250dc37526" name="get-quote-Sub_Flow"/>
     </flow>
 </mule>

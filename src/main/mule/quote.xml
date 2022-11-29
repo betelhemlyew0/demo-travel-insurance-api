@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<sub-flow name="get-quote-Sub_Flow" doc:id="0e0c07b0-d14b-4ce6-a020-c62633726a0a" >
+		<logger level="INFO" doc:name="Logger" doc:id="d60a7ab1-f01e-48a5-be95-9cea9839eafe" message="request received to get quotes "/>
+		<ee:transform doc:name="Transform Message" doc:id="7de12a14-0d28-4835-a0b8-f97d9526ad36" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="age" ><![CDATA[attributes.queryParams.age]]></ee:set-variable>
+				<ee:set-variable variableName="destination" ><![CDATA[attributes.queryParams.destination]]></ee:set-variable>
+				<ee:set-variable variableName="tripEndDate" ><![CDATA[attributes.queryParams.tripEndDate]]></ee:set-variable>
+				<ee:set-variable variableName="tripStartDate" ><![CDATA[attributes.queryParams.tripStartDate]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="c6be3e6c-ab5f-4008-9494-ed28cba297c7" message="request completed successfully to get quotes"/>
+	</sub-flow>
+</mule>
