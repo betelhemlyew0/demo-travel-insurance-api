@@ -5,8 +5,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="get-quote-Sub_Flow" doc:id="0e0c07b0-d14b-4ce6-a020-c62633726a0a" >
-		<logger level="INFO" doc:name="Logger" doc:id="d60a7ab1-f01e-48a5-be95-9cea9839eafe" message="request received to get quotes "/>
-		<ee:transform doc:name="Transform Message" doc:id="7de12a14-0d28-4835-a0b8-f97d9526ad36" >
+		<logger level="INFO" doc:name="request received" doc:id="d60a7ab1-f01e-48a5-be95-9cea9839eafe" message="request received to get quotes "/>
+		<ee:transform doc:name="set variable" doc:id="7de12a14-0d28-4835-a0b8-f97d9526ad36" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -16,25 +16,26 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-variable variableName="tripStartDate" ><![CDATA[attributes.queryParams.tripStartDate]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="c6be3e6c-ab5f-4008-9494-ed28cba297c7" message="request completed successfully to get quotes"/>
-		<ee:transform doc:name="Transform Message" doc:id="9a4b2808-906e-41ef-984c-2b5b12c8254c" >
+		<ee:transform doc:name="read insurance plans" doc:id="9a4b2808-906e-41ef-984c-2b5b12c8254c">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+readUrl("classpath://Travel_Insurance_Plans.json","application/json")]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="response" doc:id="d1f01da3-d0c3-43f4-bf67-91b4e823c95a" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-[
-  {
-    plan: "gold",
-    coverage: 25000,
-    premium: 300
-  }, 
-  {
-    plan: "platinum",
-    coverage: 50000,
-    premium: 500
-  }
-]]]></ee:set-payload>
+payload map ((item, index) -> {
+    "plan" : item.plan,
+    "coverage" : item.coverage,
+    "premium" : ((item.brackets filter ($.minAge < vars.age and vars.age< $.maxAge)).PremiumperDay) [0] * (daysBetween(vars.tripStartDate as Date, vars.tripEndDate as Date) + 1)
+})]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="request completed" doc:id="c6be3e6c-ab5f-4008-9494-ed28cba297c7" message="request completed successfully to get quotes"/>
 	</sub-flow>
 </mule>
