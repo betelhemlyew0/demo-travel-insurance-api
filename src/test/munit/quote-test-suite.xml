@@ -8,6 +8,18 @@
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="quote-test-suite.xml" />
+	<global-property doc:name="Global Property" doc:id="42811b3f-c536-4fca-aef7-9340e147f925" name="env" value="local" />
+	<munit:test name="quote-test-suite-get-quote-Sub_FlowTest" doc:id="44764d1b-ec81-4b99-adfa-327156073f2b" description="Test">
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="c76b5683-f8d9-46c8-8568-b263cf341b61" >
+				<munit:attributes value='{&#10;	"queryParams": {&#10;		"destination" : "Asia",&#10;		"age" : 32,&#10;		"tripStartDate" : "2022-12-05",&#10;		"tripEndDate" : "2022-12-20"&#10;		}&#10;	}' mediaType="application/json" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to get-quote-Sub_Flow" doc:id="4f182fae-b713-4816-b8e1-437369f9a357" name="get-quote-Sub_Flow"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="77b511eb-a79a-4371-ad87-b84ff6c68fad" actual="#[payload[0].premium]" expected="100" message="premium for gold be 100"/>
+		</munit:validation>
+	</munit:test>
 
 
 </mule>
