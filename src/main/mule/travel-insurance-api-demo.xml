@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
-http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd  http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd">
     <http:listener-config name="travel-insurance-api-demo-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
-    <apikit:config name="travel-insurance-api-demo-config" api="resource::ccab5823-d90e-4e42-89c2-5312f9255e95:travel-insurance-api-demo:1.0.0:raml:zip:travel-insurance-api-demo.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="travel-insurance-api-demo-config" api="resource::ccab5823-d90e-4e42-89c2-5312f9255e95:travel-insurance-api-demo:1.0.1:raml:zip:travel-insurance-api-demo.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <configuration-properties doc:name="Configuration properties" doc:id="98ce192a-0335-4c25-ab57-e6a2d9988873" file="config/${env}.properties" />
-	<configuration doc:name="Configuration" doc:id="c675bc67-28d5-4c54-b4a0-ffae7c3077b0" defaultErrorHandler-ref="globalError_Handler" />
-	<api-gateway:autodiscovery apiId="${id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="a21a8db8-cd3d-46ef-a174-52c7bd6c53d9" flowRef="travel-insurance-api-demo-main" />
-	<flow name="travel-insurance-api-demo-main">
+    <configuration doc:name="Configuration" doc:id="c675bc67-28d5-4c54-b4a0-ffae7c3077b0" defaultErrorHandler-ref="globalError_Handler" />
+<!--     <api-gateway:autodiscovery apiId="${id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="a21a8db8-cd3d-46ef-a174-52c7bd6c53d9" flowRef="travel-insurance-api-demo-main" />
+ -->    <flow name="travel-insurance-api-demo-main">
         <http:listener config-ref="travel-insurance-api-demo-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -21,26 +20,29 @@ http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/m
         <apikit:router config-ref="travel-insurance-api-demo-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
-				<flow-ref doc:name="Flow Reference" doc:id="87b3501f-304a-4f99-971f-0bb7afea45b3" name="set-error-response-Sub_Flow"/>
+                <flow-ref doc:name="Flow Reference" doc:id="87b3501f-304a-4f99-971f-0bb7afea45b3" name="set-error-response-Sub_Flow" />
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_FOUND">
-				<flow-ref doc:name="Flow Reference" doc:id="a4b9c046-6086-49c9-94e4-ed8db7276e40" name="set-error-response-Sub_Flow"/>
+                <flow-ref doc:name="Flow Reference" doc:id="a4b9c046-6086-49c9-94e4-ed8db7276e40" name="set-error-response-Sub_Flow" />
             </on-error-propagate>
             <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
-				<flow-ref doc:name="Flow Reference" doc:id="f8240ef1-8d2f-4f82-a2d4-829d52477045" name="set-error-response-Sub_Flow"/>
+                <flow-ref doc:name="Flow Reference" doc:id="f8240ef1-8d2f-4f82-a2d4-829d52477045" name="set-error-response-Sub_Flow" />
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
-				<flow-ref doc:name="Flow Reference" doc:id="1c5bc77c-d652-4853-9d7a-a8ce75ec7bbc" name="set-error-response-Sub_Flow"/>
+                <flow-ref doc:name="Flow Reference" doc:id="1c5bc77c-d652-4853-9d7a-a8ce75ec7bbc" name="set-error-response-Sub_Flow" />
             </on-error-propagate>
             <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
-				<flow-ref doc:name="Flow Reference" doc:id="0ef49154-ceac-4134-a22d-f2623d6639e2" name="set-error-response-Sub_Flow"/>
+                <flow-ref doc:name="Flow Reference" doc:id="0ef49154-ceac-4134-a22d-f2623d6639e2" name="set-error-response-Sub_Flow" />
             </on-error-propagate>
             <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
-				<flow-ref doc:name="Flow Reference" doc:id="0d68589f-f323-40a2-8644-da636c838295" name="set-error-response-Sub_Flow"/>
+                <flow-ref doc:name="Flow Reference" doc:id="0d68589f-f323-40a2-8644-da636c838295" name="set-error-response-Sub_Flow" />
             </on-error-propagate>
         </error-handler>
     </flow>
     <flow name="get:\quote:travel-insurance-api-demo-config" doc:id="5f37acb1-3e6e-4c51-8f9e-582f698049b7">
-        <flow-ref doc:name="get-quote-Sub_Flow" doc:id="c0fdf4b6-f3b0-4569-87d4-f6250dc37526" name="get-quote-Sub_Flow"/>
+        <flow-ref doc:name="get-quote-Sub_Flow" doc:id="c0fdf4b6-f3b0-4569-87d4-f6250dc37526" name="get-quote-Sub_Flow" />
+    </flow>
+    <flow name="post:\policy:application\json:travel-insurance-api-demo-config">
+        <flow-ref doc:name="create-policy-sub-flow" doc:id="64433266-dcda-41ae-b28f-ff65b8f34d2a" name="create-policy-sub-flow"/>
     </flow>
 </mule>
