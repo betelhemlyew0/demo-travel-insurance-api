@@ -6,8 +6,8 @@
     <apikit:config name="travel-insurance-api-demo-config" api="resource::ccab5823-d90e-4e42-89c2-5312f9255e95:travel-insurance-api-demo:1.0.1:raml:zip:travel-insurance-api-demo.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <configuration-properties doc:name="Configuration properties" doc:id="98ce192a-0335-4c25-ab57-e6a2d9988873" file="config/${env}.properties" />
     <configuration doc:name="Configuration" doc:id="c675bc67-28d5-4c54-b4a0-ffae7c3077b0" defaultErrorHandler-ref="globalError_Handler" />
-<!--     <api-gateway:autodiscovery apiId="${id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="a21a8db8-cd3d-46ef-a174-52c7bd6c53d9" flowRef="travel-insurance-api-demo-main" />
- -->    <flow name="travel-insurance-api-demo-main">
+    <api-gateway:autodiscovery apiId="${id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="a21a8db8-cd3d-46ef-a174-52c7bd6c53d9" flowRef="travel-insurance-api-demo-main" />
+    <flow name="travel-insurance-api-demo-main">
         <http:listener config-ref="travel-insurance-api-demo-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
