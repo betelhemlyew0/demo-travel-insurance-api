@@ -3,7 +3,7 @@
     <http:listener-config name="travel-insurance-api-demo-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
-    <apikit:config name="travel-insurance-api-demo-config" api="resource::ccab5823-d90e-4e42-89c2-5312f9255e95:travel-insurance-api-demo:1.0.1:raml:zip:travel-insurance-api-demo.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="travel-insurance-api-demo-config" api="resource::ccab5823-d90e-4e42-89c2-5312f9255e95:travel-insurance-api-demo:1.0.2:raml:zip:travel-insurance-api-demo.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <configuration-properties doc:name="Configuration properties" doc:id="98ce192a-0335-4c25-ab57-e6a2d9988873" file="config/${env}.properties" />
     <configuration doc:name="Configuration" doc:id="c675bc67-28d5-4c54-b4a0-ffae7c3077b0" defaultErrorHandler-ref="globalError_Handler" />
     <api-gateway:autodiscovery apiId="${id}" ignoreBasePath="true" doc:name="API Autodiscovery" doc:id="a21a8db8-cd3d-46ef-a174-52c7bd6c53d9" flowRef="travel-insurance-api-demo-main" />
@@ -43,6 +43,9 @@
         <flow-ref doc:name="get-quote-Sub_Flow" doc:id="c0fdf4b6-f3b0-4569-87d4-f6250dc37526" name="get-quote-Sub_Flow" />
     </flow>
     <flow name="post:\policy:application\json:travel-insurance-api-demo-config">
-        <flow-ref doc:name="create-policy-sub-flow" doc:id="64433266-dcda-41ae-b28f-ff65b8f34d2a" name="create-policy-sub-flow"/>
+        <flow-ref doc:name="create-policy-sub-flow" doc:id="64433266-dcda-41ae-b28f-ff65b8f34d2a" name="create-policy-sub-flow" />
+    </flow>
+    <flow name="get:\policy\(policyId):travel-insurance-api-demo-config" doc:id="eeaff8ce-9771-43d3-b303-4db6c67dea7c">
+        <flow-ref doc:name="get-policy-details-sub-flow" doc:id="e5d70ea6-dfd4-404e-ae41-ca088f7f48db" name="get-policy-details-Sub-Flow"/>
     </flow>
 </mule>

@@ -1,0 +1,20 @@
+{
+    "personalDetails": {
+        "name": "selam",
+        "dateOfBirth": "2020-11-14",
+        "address": "USA"
+    },
+    "trip": {
+        "destination": "Asia",
+        "tripStartDate": "2020-11-14",
+        "tripEndDate": "2020-12-20"
+    },
+    "plan": {
+        "planName": "gold",
+        "premium": 500,
+        "coverage": 50000
+    },
+    "purchaceDate": "2020-11-24",
+    "policyId": "0773ecb2-5a67-4a00-b9e1-4fa0d678b19a",
+    "createdBy": "Agent123"
+}

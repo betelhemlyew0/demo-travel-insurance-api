@@ -51,4 +51,46 @@ output application/json
 		</ee:transform>
 		<logger level="INFO" doc:name="request completed" doc:id="2cd3be79-c04c-40df-9ffa-643ed6f5533f" message="request completed successfully to create policy"/>
 	</sub-flow>
+	<sub-flow name="get-policy-details-Sub-Flow" doc:id="bfe42ffc-0ff8-45b2-98bb-450167ad0668" >
+		<logger level="INFO" doc:name="request recieved" doc:id="bd85bbe4-c2fd-4483-a0cf-b0a7f56f7dad" message="request recieved to get policy details"/>
+		<ee:transform doc:name="set variable" doc:id="45fbf017-71ad-40f2-960d-2aa905958bec" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="policyId" ><![CDATA[%dw 2.0
+output application/json
+---
+attributes.uriParams.policyId]]></ee:set-variable>
+				<ee:set-variable variableName="folderLocation" ><![CDATA[%dw 2.0
+output application/json
+---
+p("policyFolderLocation")]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<try doc:name="Try" doc:id="90e73850-ebaa-4be4-b922-fd5258bb98b9" >
+			<file:read doc:name="Read" doc:id="08b28cb4-b757-466b-bdb9-6d6d7d140fa2" path='#[vars.folderLocation ++ vars.policyId ++ ".json"]' />
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="f671f4a2-a4bc-47c1-abf8-5d8807116c89" >
+					<ee:transform doc:name="set error response" doc:id="cc028d31-e128-4aa8-b7ad-413396559aaf">
+						<ee:message>
+							<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status" : "failed",
+	"message" : "policy Id provided is invalid"
+}]]></ee:set-payload>
+						</ee:message>
+						<ee:variables >
+							<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/json
+---
+400]]></ee:set-variable>
+						</ee:variables>
+					</ee:transform>
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<logger level="INFO" doc:name="request completed" doc:id="82b36baa-e4cd-46cb-a28f-d623ab73e93d" message="request completed to get policy details"/>
+	</sub-flow>
 </mule>
